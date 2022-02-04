@@ -13,8 +13,6 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
-# Quel·le·s candidat·e·s à l'élection présidentielle ont reçu leurs 500 parrainages ?
-
 ```{r, fig.height = 5}
 library(tidyverse)
 
@@ -36,7 +34,7 @@ read_csv2(parrainages_csv) %>%
       x = "Nombre de parrainages",
       y = "",
       fill = "Date du parrainage",
-      title = "",
+      title = "Quel·le·s candidat·e·s à l'élection présidentielle\nont reçu leurs 500 parrainages ?",
       subtitle = "",
       caption = glue::glue("Source des données: https://presidentielle2022.conseil-constitutionnel.fr\nMis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)")
     ) +
