@@ -1,0 +1,53 @@
+---
+title: "Parrainages et candidatures à l'élection présidentielle 2022"
+description: Mis à jour le `r format(lubridate::today(), '%d/%m/%Y')`
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating websites with Distill at:
+# https://rstudio.github.io/distill/website.html
+
+
+```
+
+# Quel·le·s candidat·e·s à l'élection présidentielle ont reçu leurs 500 parrainages ?
+
+```{r, fig.height = 5}
+library(tidyverse)
+
+parrainages_csv <- "https://presidentielle2022.conseil-constitutionnel.fr/telechargement/parrainagestotal.csv"
+date_premier_tour <- as.Date('2022-04-10')
+
+ajd <- lubridate::today()
+
+read_csv2(parrainages_csv) %>%
+  ggplot(aes(y = fct_rev(fct_infreq(Candidat)), fill = fct_rev(`Date de publication`))) +
+    geom_histogram(stat = "count") +
+    scale_fill_brewer(palette = "Greens", direction = -1) +
+    geom_vline(xintercept = 500, colour = "darkred") +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom"
+    ) +
+    labs(
+      x = "Nombre de parrainages",
+      y = "",
+      fill = "Date du parrainage",
+      title = "",
+      subtitle = "",
+      caption = glue::glue("Source des données: https://presidentielle2022.conseil-constitutionnel.fr\nMis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)")
+    ) +
+    annotate(
+      geom = "curve", x = 450, y = 10, xend = 499, yend = 10,
+      curvature = -.3, arrow = arrow(length = unit(2, "mm")),
+      colour = "darkred"
+    ) +
+    annotate(
+      geom = "text", x = 450, y = 10,
+      label = "Nombre de parrainages requis\npour participer à l'élection",
+      hjust = "right", colour = "darkred") +
+   NULL
+```

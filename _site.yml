@@ -1,0 +1,10 @@
+name: "Élection présidentielle 2022"
+title: ""
+description: |
+  Parrainages et candidatures à l'élection présidentielle 2022
+output_dir: "_site"
+navbar:
+  right:
+    - text: "Accueil"
+      href: index.html
+output: distill::distill_article

@@ -1,0 +1,13 @@
+{
+  "articles": [
+    {
+      "path": "index.html",
+      "title": "Parrainages et candidatures à l'élection présidentielle 2022",
+      "description": "Mis à jour le `r format(lubridate::today(), '%d/%m/%Y')`",
+      "author": [],
+      "contents": "\nQuel·le·s candidat·e·s à l’élection présidentielle ont reçu leurs 500 parrainages ?\n\n\n\n\n\n\n",
+      "last_modified": "2022-02-04T11:26:04+01:00"
+    }
+  ],
+  "collections": []
+}
