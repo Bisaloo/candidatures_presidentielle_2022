@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 
 parrainages_csv <- "https://presidentielle2022.conseil-constitutionnel.fr/telechargement/parrainagestotal.csv"
+
 date_premier_tour <- as.Date('2022-04-10')
 
 ajd <- lubridate::today()
@@ -49,3 +50,50 @@ read_csv2(parrainages_csv) %>%
       hjust = "right", colour = "darkred") +
    NULL
 ```
+```{r, fig.height = 5}
+library(tidyverse)
+
+prev_parrainages_csv <- "https://presidentielle2017.conseil-constitutionnel.fr/wp-content/uploads/2017/03/parrainagestotal.csv"
+
+n_2017 = read_csv2(prev_parrainages_csv) %>% nrow()
+
+
+date_premier_tour <- as.Date('2022-04-10')
+ajd <- lubridate::today()
+
+data.frame(nombre = c(
+  n_2017 = read_csv2(prev_parrainages_csv) %>% nrow(),
+  n_2020 = read_csv2(parrainages_csv) %>% nrow(),
+  n_max = 42e3
+), date = c(
+  "Total validé 2017",
+  "Total validé 2020", 
+  "Total approximé"
+)) %>% 
+ggplot(aes(x=nombre, y=date)) + 
+  geom_bar(stat = "identity") +
+    scale_fill_brewer(palette = "Greens", direction = -1) +
+    # geom_vline(xintercept = n_2017, colour = "darkred") +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom"
+    ) +
+    labs(
+      x = "Nombre de parrainages",
+      y = "",
+      title = "Nombre total de parrainages",
+      subtitle = "",
+      caption = glue::glue("Source des données: https://presidentielle2022.conseil-constitutionnel.fr\nhttps://presidentielle217.conseil-constitutionnel.fr\nMis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)")
+    ) +
+    # annotate(
+    #   geom = "curve", x = n_2017 +1, y = 2, xend = n_2017 + 2e3, yend = 2,
+    #   curvature = -.3, arrow = arrow(length = unit(2, "mm"), ends ="first"),
+    #   colour = "darkred"
+    # ) +
+    # annotate(
+    #   geom = "text", x = n_2017 + 2e3, y = 2,
+    #   label = "Nombre de parrainages validés en 2017",
+    #   hjust = "left", colour = "darkred") +
+   NULL
+```
+
