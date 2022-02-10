@@ -46,7 +46,7 @@ headshots_url <- str_replace(headshots_url, "jean_luc_melenchon", "jean_luc-mele
 headshots_url <- str_replace(headshots_url, "2021_10_11_christiane_taubira", "2021_12_17_christiane_taubira")
 headshots_url <- str_replace(headshots_url, "2021_10_11_gaspard_koenig", "2022_01_11_gaspard_koenig")
 
-download.file(headshots_url, glue::glue("img/{headshots}.png"))
+mapply(download.file, headshots_url, glue::glue("img/{headshots}.png"))
 
 d %>%
   ggplot(aes(y = fct_rev(Candidat), fill = fct_rev(`Date de publication`))) +
