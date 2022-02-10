@@ -22,6 +22,8 @@ date_premier_tour <- as.Date('2022-04-10')
 ajd <- lubridate::today()
 
 read_csv2(parrainages_csv) %>%
+  mutate(Candidat = fct_lump_min(Candidat, 10)) %>%
+  filter(Candidat != "Other") %>%
   ggplot(aes(y = fct_rev(fct_infreq(Candidat)), fill = fct_rev(`Date de publication`))) +
     geom_histogram(stat = "count") +
     scale_fill_brewer(palette = "Greens", direction = -1) +
@@ -35,8 +37,8 @@ read_csv2(parrainages_csv) %>%
       y = "",
       fill = "Date du parrainage",
       title = "Quel·le·s candidat·e·s à l'élection présidentielle\nont reçu leurs 500 parrainages ?",
-      subtitle = "",
-      caption = glue::glue("Source des données: https://presidentielle2022.conseil-constitutionnel.fr\nMis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)")
+      subtitle = glue::glue("Source des données: https://presidentielle2022.conseil-constitutionnel.fr\nMis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)"),
+      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 10 parrainages sont présent·e·s sur ce graphique"
     ) +
     annotate(
       geom = "curve", x = 450, y = 10, xend = 499, yend = 10,
