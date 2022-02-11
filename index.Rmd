@@ -9,24 +9,36 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 # Learn more about creating websites with Distill at:
 # https://rstudio.github.io/distill/website.html
-
-
 ```
 
-```{r, fig.height = 5}
+```{r download-data, cache = TRUE, cache.extra = Sys.Date()}
+parrainages_csv <- "https://presidentielle2022.conseil-constitutionnel.fr/telechargement/parrainagestotal.csv"
+
+library(httr2)
+try({
+  request(parrainages_csv) %>%
+    req_retry(max_tries = 10) %>%
+    req_perform() %>%
+    resp_body_string() %>%
+    write(file = "data/parrainages_2022.csv")
+}, silent = TRUE)
+```
+
+```{r, fig.height = 10}
 library(tidyverse)
 
-parrainages_csv <- "https://presidentielle2022.conseil-constitutionnel.fr/telechargement/parrainagestotal.csv"
 date_premier_tour <- as.Date('2022-04-10')
 
 ajd <- lubridate::today()
 
-d <- read_csv2(parrainages_csv) %>%
+d <- read_csv2("data/parrainages_2022.csv") %>%
   mutate(Candidat = fct_lump_min(Candidat, 10)) %>%
   filter(Candidat != "Other") %>%
   mutate(Candidat = fct_drop(Candidat)) %>%
   mutate(Candidat = fct_infreq(Candidat))
+```
 
+```{r}
 candidats <- d %>%
   pull(Candidat) %>%
   levels() %>%
@@ -45,9 +57,33 @@ headshots_url <- headshots %>%
 headshots_url <- str_replace(headshots_url, "jean_luc_melenchon", "jean_luc-melenchon")
 headshots_url <- str_replace(headshots_url, "2021_10_11_christiane_taubira", "2021_12_17_christiane_taubira")
 headshots_url <- str_replace(headshots_url, "2021_10_11_gaspard_koenig", "2022_01_11_gaspard_koenig")
+```
 
-mapply(download.file, headshots_url, glue::glue("img/{headshots}.png"), quiet = TRUE)
+```{r, cache = TRUE}
+#' @url The url where to download the headshot
+#' @file The filename where to save the headshot
+get_headshot <- function(url, file) {
 
+  request(url) %>%
+    req_retry(max_tries = 5) %>%
+    req_perform() %>%
+    resp_body_raw() %>%
+    writeBin(file)
+  
+  message("Successfully downloaded ", file)
+
+}
+
+get_headshot_safely <- safely(get_headshot)
+
+walk2(
+  headshots_url,
+  glue::glue("img/{headshots}.png"),
+ ~ get_headshot_safely(.x, .y)
+)
+```
+
+```{r}
 d %>%
   ggplot(aes(y = fct_rev(Candidat), fill = fct_rev(`Date de publication`))) +
     geom_histogram(stat = "count") +
