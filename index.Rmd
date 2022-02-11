@@ -83,7 +83,7 @@ walk2(
 )
 ```
 
-```{r}
+```{r, layout="l-body-outset", fig.height= 7, fig.width=8}
 d %>%
   ggplot(aes(y = fct_rev(Candidat), fill = fct_rev(`Date de publication`))) +
     geom_histogram(stat = "count") +
@@ -99,8 +99,8 @@ d %>%
       y = "",
       fill = "Date du parrainage",
       title = "Quel·le·s candidat·e·s à l'élection présidentielle\nont reçu leurs 500 parrainages ?",
-      subtitle = glue::glue("Source des données: https://presidentielle2022.conseil-constitutionnel.fr\nMis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)\nSource des images: franceinfo"),
-      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 10 parrainages sont présent·e·s sur ce graphique"
+      subtitle = glue::glue("Mis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)"),
+      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 10 parrainages sont présent·e·s sur ce graphique.\n\nSources:\n- données: https://presidentielle2022.conseil-constitutionnel.fr\n- images: franceinfo"
     ) +
     annotate(
       geom = "curve", x = 550, y = 10, xend = 501, yend = 10,
@@ -111,6 +111,6 @@ d %>%
       geom = "text", x = 550, y = 10,
       label = "Nombre de parrainages requis\npour participer à l'élection",
       hjust = "left", colour = "darkred") +
-    scale_y_discrete(labels = glue::glue("{rev(candidats)} <img src='img/{rev(headshots)}.png' width='10'>")) +
+    scale_y_discrete(labels = glue::glue("{rev(candidats)} <img src='img/{rev(headshots)}.png' width='19'>")) +
    NULL
 ```
