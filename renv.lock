@@ -497,6 +497,21 @@
       "Hash": "177475892cf4a55865868527654a7741",
       "Requirements": []
     },
+    "ggalluvial": {
+      "Package": "ggalluvial",
+      "Version": "0.12.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "8e8537ec2a70017be8e5e20b1bbf4e98",
+      "Requirements": [
+        "dplyr",
+        "ggplot2",
+        "lazyeval",
+        "rlang",
+        "tidyr",
+        "tidyselect"
+      ]
+    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.3.5",
@@ -767,6 +782,14 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "b64cdbb2b340437c4ee047a1f4c4377b",
+      "Requirements": []
+    },
+    "lazyeval": {
+      "Package": "lazyeval",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "d908914ae53b04d4c0c0fd72ecc35370",
       "Requirements": []
     },
     "lifecycle": {
