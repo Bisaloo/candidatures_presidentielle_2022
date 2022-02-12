@@ -9,14 +9,25 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 # Learn more about creating websites with Distill at:
 # https://rstudio.github.io/distill/website.html
+library(tidyverse)
+library(httr2)
+library(ggalluvial)
 ```
 
 ```{r download-data, cache = TRUE, cache.extra = Sys.Date()}
-parrainages_csv <- "https://presidentielle2022.conseil-constitutionnel.fr/telechargement/parrainagestotal.csv"
+parrainages_csv_2017 <- "https://presidentielle2017.conseil-constitutionnel.fr/wp-content/uploads/2017/03/parrainagestotal.csv"
+parrainages_csv_2022 <- "https://presidentielle2022.conseil-constitutionnel.fr/telechargement/parrainagestotal.csv"
 
-library(httr2)
 try({
-  request(parrainages_csv) %>%
+  request(parrainages_csv_2017) %>%
+    req_retry(max_tries = 10) %>%
+    req_perform() %>%
+    resp_body_string() %>%
+    write(file = "data/parrainages_2017.csv")
+}, silent = TRUE)
+
+try({
+  request(parrainages_csv_2022) %>%
     req_retry(max_tries = 10) %>%
     req_perform() %>%
     resp_body_string() %>%
@@ -24,21 +35,40 @@ try({
 }, silent = TRUE)
 ```
 
-```{r, fig.height = 10}
-library(tidyverse)
+```{r load-data}
+parrainages_2017 <- read_csv2("data/parrainages_2017.csv") %>%
+  mutate(
+    Candidat = `Candidat-e parrainé-e`,
+    Élection = "2017",
+    .keep = "unused"
+  )
 
+parrainages_2022 <- read_csv2("data/parrainages_2022.csv") %>%
+  mutate(
+    Candidat = stringi::stri_trans_general(Candidat, "ASCII"),
+    Élection = "2022",
+    Civilité = gsub("\\.$", "", Civilité)
+  )
+
+parrainages <- full_join(
+  parrainages_2017,
+  parrainages_2022
+)
+```
+
+```{r specify-dates}
 date_premier_tour <- as.Date('2022-04-10')
 
 ajd <- lubridate::today()
+```
 
-d <- read_csv2("data/parrainages_2022.csv") %>%
+```{r}
+d <- parrainages_2022 %>%
   mutate(Candidat = fct_lump_min(Candidat, 10)) %>%
   filter(Candidat != "Other") %>%
   mutate(Candidat = fct_drop(Candidat)) %>%
   mutate(Candidat = fct_infreq(Candidat))
-```
 
-```{r}
 candidats <- d %>%
   pull(Candidat) %>%
   levels() %>%
@@ -114,3 +144,36 @@ d %>%
     scale_y_discrete(labels = glue::glue("{rev(candidats)} <img src='img/{rev(headshots)}.png' width='19'>")) +
    NULL
 ```
+
+```{r, layout="l-body-outset", fig.height=11, fig.width=13}
+parrainages %>%
+  mutate(Candidat = fct_lump_min(Candidat, 500, other_level = "Autre")) %>%
+  pivot_wider(
+    id_cols = c("Civilité", "Nom", "Prénom", "Circonscription", "Département"),
+    names_from = Élection, values_from = Candidat, names_prefix = "Candidat_"
+  ) %>%
+  group_by(Candidat_2017, Candidat_2022) %>%
+  summarise(n = n()) %>%
+  mutate(
+    same = if_else(Candidat_2017 == Candidat_2022, "Oui", "Non")
+  ) %>%
+  ggplot(aes(axis1 = Candidat_2017, axis2 = Candidat_2022, y = n)) +
+    geom_alluvium(aes(fill = factor(same))) +
+    geom_stratum() +
+    geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
+    labs(
+      fill = "Même candidat ?",
+      y = "Nombre de parrainages",
+      title = "Comment les parrainages des élu·e·s ont évolué depuis la dernière élection présidentielle ?",
+      subtitle = glue::glue("Mis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)"),
+      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s qualifié·e·s pour l'élection de 2017 sont présent·e·s sur ce graphique.\n\nSources:\n- https://presidentielle2022.conseil-constitutionnel.fr\n- https://presidentielle2017.conseil-constitutionnel.fr"
+    ) +
+    scale_x_discrete(limits = c("2017", "2022")) +
+    theme_minimal() +
+    theme(
+      legend.position = "bottom"
+    ) +
+    scale_fill_manual(na.translate = FALSE, values = c("#E69F00", "#56B4E9")) +
+    NULL
+```
+
