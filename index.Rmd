@@ -14,6 +14,8 @@ library(httr2)
 library(ggalluvial)
 ```
 
+Ce site est automatiquement mis à jour chaque jour à midi et minuit.
+
 ```{r download-data, cache = TRUE, cache.extra = Sys.Date()}
 parrainages_csv_2017 <- "https://presidentielle2017.conseil-constitutionnel.fr/wp-content/uploads/2017/03/parrainagestotal.csv"
 parrainages_csv_2022 <- "https://presidentielle2022.conseil-constitutionnel.fr/telechargement/parrainagestotal.csv"
