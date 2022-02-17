@@ -47,7 +47,7 @@ parrainages_2017 <- read_csv2("data/parrainages_2017.csv") %>%
 
 parrainages_2022 <- read_csv2("data/parrainages_2022.csv") %>%
   mutate(
-    Candidat = stringi::stri_trans_general(Candidat, "ASCII"),
+    Candidat = str_replace(Candidat, "[ÉÈ]", "E"),
     Élection = "2022",
     Civilité = gsub("\\.$", "", Civilité)
   )
