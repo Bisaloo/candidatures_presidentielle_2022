@@ -132,7 +132,7 @@ d %>%
       fill = "Date du parrainage",
       title = "Quel·le·s candidat·e·s à l'élection présidentielle\nont reçu leurs 500 parrainages ?",
       subtitle = glue::glue("Mis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)"),
-      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 15 parrainages sont présent·e·s sur ce graphique.\n\nSources:\n- données: https://presidentielle2022.conseil-constitutionnel.fr\n- images: franceinfo"
+      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 15 parrainages sont présent·e·s sur ce graphique.\n\nSources:\n- données: https://presidentielle2022.conseil-constitutionnel.fr\n- images: franceinfo\n\nCréé par @grusonh."
     ) +
     annotate(
       geom = "curve", x = 750, y = 10, xend = 501, yend = 10,
@@ -168,7 +168,7 @@ parrainages %>%
       y = "Nombre de parrainages",
       title = "Comment les parrainages des élu·e·s ont évolué depuis la dernière élection présidentielle ?",
       subtitle = glue::glue("Mis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)"),
-      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s qualifié·e·s pour l'élection de 2017 sont présent·e·s sur ce graphique.\n\nSources:\n- https://presidentielle2022.conseil-constitutionnel.fr\n- https://presidentielle2017.conseil-constitutionnel.fr"
+      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s qualifié·e·s pour l'élection de 2017 sont présent·e·s sur ce graphique.\n\nSources:\n- https://presidentielle2022.conseil-constitutionnel.fr\n- https://presidentielle2017.conseil-constitutionnel.fr\n\nCréé par @grusonh."
     ) +
     scale_x_discrete(limits = c("2017", "2022")) +
     theme_minimal() +
