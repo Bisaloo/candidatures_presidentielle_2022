@@ -177,7 +177,7 @@ parrainages %>%
       y = "Nombre de parrainages",
       title = "Comment les parrainages des élu·e·s ont évolué depuis la dernière élection présidentielle ?",
       subtitle = glue::glue("Mis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)"),
-      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s qualifié·e·s pour l'élection de 2017 sont présent·e·s sur ce graphique.\n\nSources:\n- https://presidentielle2022.conseil-constitutionnel.fr\n- https://presidentielle2017.conseil-constitutionnel.fr\n\nCréé par @grusonh."
+      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s qualifié·e·s pour une des deux élections sont présent·e·s sur ce graphique.\n\nSources:\n- https://presidentielle2022.conseil-constitutionnel.fr\n- https://presidentielle2017.conseil-constitutionnel.fr\n\nCréé par @grusonh."
     ) +
     scale_x_discrete(limits = c("2017", "2022")) +
     theme_minimal() +
