@@ -115,7 +115,7 @@ walk2(
 )
 ```
 
-```{r, layout="l-body-outset", fig.height= 7, fig.width=8}
+```{r, layout="l-body-outset", fig.height=7.5, fig.width=8}
 d %>%
   ggplot(aes(y = fct_rev(Candidat), fill = fct_rev(`Date de publication`))) +
     geom_histogram(stat = "count") +
