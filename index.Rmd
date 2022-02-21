@@ -71,6 +71,11 @@ d <- parrainages_2022 %>%
   mutate(Candidat = fct_drop(Candidat)) %>%
   mutate(Candidat = fct_infreq(Candidat))
 
+# Count total signatures per candidate
+total <- d %>%
+  count(Candidat) %>%
+  mutate(sup_100 = n >= 100)
+
 candidats <- d %>%
   pull(Candidat) %>%
   levels() %>%
@@ -119,8 +124,12 @@ walk2(
 d %>%
   ggplot(aes(y = fct_rev(Candidat), fill = fct_rev(`Date de publication`))) +
     geom_histogram(stat = "count") +
-    scale_fill_brewer(palette = "Greens", direction = -1) +
+    scale_fill_brewer(palette = "Greens", direction = 1) +
     geom_vline(xintercept = 500, colour = "darkred") +
+    geom_text(data = filter(total, sup_100), aes(x = n, label = n, fill = NA),
+              hjust = 1.15, size = 8.8 * 1/.pt, colour = "white") +
+    geom_text(data = filter(total, !sup_100), aes(x = n, label = n, fill = NA),
+              hjust = -0.15, size = 8.8 * 1/.pt, colour = "grey20") +
     theme_minimal() +
     theme(
       legend.position = "bottom",
