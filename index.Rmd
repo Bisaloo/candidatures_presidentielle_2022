@@ -74,7 +74,10 @@ d <- parrainages_2022 %>%
 # Count total signatures per candidate
 total <- d %>%
   count(Candidat) %>%
-  mutate(sup_100 = n >= 100)
+  mutate(
+    sup_100 = n >= 100,
+    sup_500 = n >= 500
+  )
 
 candidats <- d %>%
   pull(Candidat) %>%
@@ -141,7 +144,7 @@ d %>%
       fill = "Date du parrainage",
       title = "Quel·le·s candidat·e·s à l'élection présidentielle\nont reçu leurs 500 parrainages ?",
       subtitle = glue::glue("Mis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)"),
-      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 15 parrainages sont présent·e·s sur ce graphique.\n\nSources:\n- données: https://presidentielle2022.conseil-constitutionnel.fr\n- images: franceinfo\n\nCréé par @grusonh."
+      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 15 parrainages sont présent·e·s sur ce graphique.\nLes candidat·e·s qualifié·e·s sont indiqué·e·s en gras.\n\nSources:\n- données: https://presidentielle2022.conseil-constitutionnel.fr\n- images: franceinfo\n\nCréé par @grusonh."
     ) +
     annotate(
       geom = "curve", x = 750, y = 10, xend = 501, yend = 10,
@@ -152,7 +155,7 @@ d %>%
       geom = "text", x = 750, y = 10,
       label = "Nombre de parrainages requis\npour participer à l'élection",
       hjust = "left", colour = "darkred") +
-    scale_y_discrete(labels = glue::glue("{rev(candidats)} <img src='img/{rev(headshots)}.png' width='19'>")) +
+    scale_y_discrete(labels = glue::glue("{rev(ifelse(total$sup_500, paste0('<b>', candidats, '</b>'), candidats))} <img src='img/{rev(headshots)}.png' width='19'>")) +
    NULL
 ```
 
