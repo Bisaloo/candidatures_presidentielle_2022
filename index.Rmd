@@ -66,7 +66,7 @@ ajd <- lubridate::today()
 
 ```{r}
 d <- parrainages_2022 %>%
-  mutate(Candidat = fct_lump_min(Candidat, 15)) %>%
+  mutate(Candidat = fct_lump_min(Candidat, 20)) %>%
   filter(Candidat != "Other") %>%
   mutate(Candidat = fct_drop(Candidat)) %>%
   mutate(Candidat = fct_infreq(Candidat))
@@ -144,7 +144,7 @@ d %>%
       fill = "Date du parrainage",
       title = "Quel·le·s candidat·e·s à l'élection présidentielle\nont reçu leurs 500 parrainages ?",
       subtitle = glue::glue("Mis à jour le {format(ajd, '%d/%m/%Y')} (J-{date_premier_tour - ajd} avant le premier tour)"),
-      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 15 parrainages sont présent·e·s sur ce graphique.\nLes candidat·e·s qualifié·e·s sont indiqué·e·s en gras.\n\nSources:\n- données: https://presidentielle2022.conseil-constitutionnel.fr\n- images: franceinfo\n\nCréé par @grusonh."
+      caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 20 parrainages sont présent·e·s sur ce graphique.\nLes candidat·e·s qualifié·e·s sont indiqué·e·s en gras.\n\nSources:\n- données: https://presidentielle2022.conseil-constitutionnel.fr\n- images: franceinfo\n\nCréé par @grusonh."
     ) +
     annotate(
       geom = "curve", x = 750, y = 10, xend = 501, yend = 10,
