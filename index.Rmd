@@ -41,6 +41,7 @@ try({
 parrainages_2017 <- read_csv2("data/parrainages_2017.csv") %>%
   mutate(
     Candidat = `Candidat-e parrainé-e`,
+    `Date de publication` = lubridate::dmy(`Date de publication`),
     Élection = "2017",
     .keep = "unused"
   )
@@ -48,6 +49,7 @@ parrainages_2017 <- read_csv2("data/parrainages_2017.csv") %>%
 parrainages_2022 <- read_csv2("data/parrainages_2022.csv") %>%
   mutate(
     Candidat = str_replace(Candidat, "[ÉÈ]", "E"),
+    `Date de publication` = lubridate::dmy(`Date de publication`),
     Élection = "2022",
     Civilité = gsub("\\.$", "", Civilité)
   )
@@ -125,7 +127,7 @@ walk2(
 
 ```{r, layout="l-body-outset", fig.height=7.5, fig.width=8}
 d %>%
-  ggplot(aes(y = fct_rev(Candidat), fill = fct_rev(`Date de publication`))) +
+  ggplot(aes(y = fct_rev(Candidat), fill = fct_rev(factor(`Date de publication`)))) +
     geom_vline(xintercept = 500, colour = "darkred") +
     geom_histogram(stat = "count") +
     scale_fill_brewer(palette = "Greens") +
