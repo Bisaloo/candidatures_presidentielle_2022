@@ -147,12 +147,12 @@ d %>%
       caption = "Pour des questions de lisibilité, seul·le·s candidat·e·s avec plus de 50 parrainages sont présent·e·s sur ce graphique.\nLes candidat·e·s qualifié·e·s sont indiqué·e·s en gras.\n\nSources:\n- données: https://presidentielle2022.conseil-constitutionnel.fr\n- images: franceinfo\n\nCréé par @grusonh."
     ) +
     annotate(
-      geom = "curve", x = 750, y = 10, xend = 501, yend = 10,
+      geom = "curve", x = 750, y = 3, xend = 501, yend = 3,
       curvature = -.3, arrow = arrow(length = unit(2, "mm")),
       colour = "darkred"
     ) +
     annotate(
-      geom = "text", x = 750, y = 10,
+      geom = "text", x = 750, y = 3,
       label = "Nombre de parrainages requis\npour participer à l'élection",
       hjust = "left", colour = "darkred") +
     scale_y_discrete(labels = glue::glue("{rev(ifelse(total$sup_500, paste0('<b>', candidats, '</b>'), candidats))} <img src='img/{rev(headshots)}.png' width='19'>")) +
