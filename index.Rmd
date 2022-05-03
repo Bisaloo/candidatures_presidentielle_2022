@@ -130,7 +130,7 @@ d %>%
   ggplot(aes(y = fct_rev(Candidat), fill = fct_rev(factor(`Date de publication`)))) +
     geom_vline(xintercept = 500, colour = "darkred") +
     geom_histogram(stat = "count") +
-    scale_fill_viridis_d(option = "E", direction = -1) +
+    scale_fill_viridis_d(option = "E") +
     geom_text(data = filter(total, sup_100), aes(x = n, label = n, fill = NULL),
               hjust = 1.15, size = 8.8 * 1/.pt, colour = "white") +
     geom_text(data = filter(total, !sup_100), aes(x = n, label = n, fill = NULL),
